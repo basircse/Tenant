@@ -1,0 +1,19 @@
+# systemd service: starts the TMS API at boot and restarts it if it stops.
+# Assumes the deployment folder is /opt/tms and a 'tms' user owns it; change both if not.
+#   sudo cp tms-api.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now tms-api
+[Unit]
+Description=TMS API and web console
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=tms
+WorkingDirectory=/opt/tms
+ExecStart=/usr/bin/java -Xms256m -Xmx768m -jar /opt/tms/tms-api.jar
+SuccessExitStatus=143
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

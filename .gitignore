@@ -1,3 +1,13 @@
 # Built by server/deploy/package.ps1; holds the server password.
 /deployment/
 /apk/
+
+# Build outputs and local data (any folder)
+build/
+.dart_tool/
+node_modules/
+target/
+dist/
+.dev-db/
+.dev-mysql/
+*.log

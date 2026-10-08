@@ -1,0 +1,138 @@
+@import 'tailwindcss';
+
+/* Colour tokens: light by default, dark from the OS setting unless the user picked a theme. */
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface-2: #f1f3f6;
+  --line: #e2e6eb;
+  --ink: #17202b;
+  --muted: #5d6b7a;
+  --accent: #0f766e;
+  --accent-soft: #e3f4f1;
+  --accent-ink: #ffffff;
+  --ok: #15803d;
+  --ok-soft: #e6f5ea;
+  --warn: #b45309;
+  --warn-soft: #fdf1e1;
+  --bad: #b91c1c;
+  --bad-soft: #fbe9e9;
+  --info: #1d4ed8;
+  --info-soft: #e7eefc;
+  --chart-1: #0f766e;
+  --chart-2: #2563eb;
+  --chart-3: #dc2626;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0e1319;
+    --surface: #161d25;
+    --surface-2: #1d2630;
+    --line: #2a3541;
+    --ink: #e6ebf0;
+    --muted: #93a1b0;
+    --accent: #2dd4bf;
+    --accent-soft: #123a37;
+    --accent-ink: #062723;
+    --ok: #4ade80;
+    --ok-soft: #133222;
+    --warn: #fbbf24;
+    --warn-soft: #3a2c10;
+    --bad: #f87171;
+    --bad-soft: #3d1717;
+    --info: #93b4fd;
+    --info-soft: #182a4d;
+    --chart-1: #2dd4bf;
+    --chart-2: #60a5fa;
+    --chart-3: #f87171;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #0e1319;
+  --surface: #161d25;
+  --surface-2: #1d2630;
+  --line: #2a3541;
+  --ink: #e6ebf0;
+  --muted: #93a1b0;
+  --accent: #2dd4bf;
+  --accent-soft: #123a37;
+  --accent-ink: #062723;
+  --ok: #4ade80;
+  --ok-soft: #133222;
+  --warn: #fbbf24;
+  --warn-soft: #3a2c10;
+  --bad: #f87171;
+  --bad-soft: #3d1717;
+  --info: #93b4fd;
+  --info-soft: #182a4d;
+  --chart-1: #2dd4bf;
+  --chart-2: #60a5fa;
+  --chart-3: #f87171;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-ink: var(--accent-ink);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', 'Noto Sans Bengali', sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'SF Mono', Consolas, monospace;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-md border border-line bg-surface px-3 py-1.5 text-sm font-medium text-ink transition-colors hover:bg-surface-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply border-transparent bg-accent text-accent-ink hover:bg-accent hover:opacity-90;
+  }
+  .btn-danger {
+    @apply border-transparent bg-bad text-white hover:bg-bad hover:opacity-90;
+  }
+  .input {
+    @apply w-full rounded-md border border-line bg-surface px-2.5 py-1.5 text-sm text-ink placeholder:text-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/25;
+  }
+  .card {
+    @apply rounded-lg border border-line bg-surface;
+  }
+  .label {
+    @apply mb-1 block text-xs font-medium text-muted;
+  }
+  .link {
+    @apply text-accent hover:underline;
+  }
+}

@@ -1,0 +1,24 @@
+# Local development database (MySQL 8.4 LTS). Start from this folder (server/) with:  docker compose up -d db
+# The API's defaults (DB_URL jdbc:mysql://localhost:3306/tms, user/password tms) match this.
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: tms
+      MYSQL_USER: tms
+      MYSQL_PASSWORD: tms
+      MYSQL_ROOT_PASSWORD: root
+      TZ: UTC
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_0900_ai_ci"]
+    ports:
+      - "3306:3306"
+    volumes:
+      - tms-db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u tms -ptms --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  tms-db:

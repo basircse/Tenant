@@ -1,0 +1,114 @@
+spring:
+  application:
+    name: tenant-management-api
+  datasource:
+    # MySQL 8.0+ (8.4 LTS recommended). Sessions run in UTC; business dates use tms.zone.
+    url: ${DB_URL:jdbc:mysql://localhost:3306/tms?connectionTimeZone=UTC&forceConnectionTimeZoneToSession=true&characterEncoding=UTF-8}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+        type:
+          # UUID ids are stored as CHAR(36) so they stay readable in SQL clients.
+          preferred_uuid_jdbc_type: CHAR
+  flyway:
+    locations: classpath:db/migration
+  jackson:
+    default-property-inclusion: non_null
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 11MB
+
+server:
+  port: ${PORT:8980}
+  error:
+    include-message: always
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+tms:
+  security:
+    # HMAC secret for signing access tokens (min 32 bytes). MUST be overridden in production.
+    jwt-secret: ${JWT_SECRET:dev-only-secret-change-me-0123456789abcdef}
+    access-token-minutes: ${ACCESS_TOKEN_MINUTES:15}
+    refresh-token-days: ${REFRESH_TOKEN_DAYS:30}
+    max-failed-logins: 5
+  license:
+    # Days after expiry during which the app stays usable read-only.
+    grace-days: ${LICENSE_GRACE_DAYS:7}
+  # First vendor account, created at startup if it does not exist (change the password after login).
+  vendor:
+    username: ${TMS_VENDOR_USERNAME:vendor}
+    password: ${TMS_VENDOR_PASSWORD:Vendor1234}
+    name: ${TMS_VENDOR_NAME:Vendor}
+  logging:
+    # Requests slower than this are logged at INFO even when DEBUG is off.
+    slow-request-ms: ${SLOW_REQUEST_MS:2000}
+  # Time zone used for business dates (rent months, due dates, overdue checks).
+  zone: ${TMS_ZONE:Asia/Dhaka}
+  # Folder with the web console's production build, served at /console/. Empty = not served.
+  web-console:
+    dir: ${WEB_CONSOLE_DIR:}
+  # Uploaded files (tenant documents, maintenance photos): <dir>/<org id>/<random id>.
+  storage:
+    dir: ${STORAGE_DIR:./data/files}
+    max-file-size: 10MB
+  push:
+    # Firebase service-account JSON. Empty = push notifications are only logged.
+    fcm-credentials: ${FCM_CREDENTIALS_FILE:}
+  # Update checker: the apps compare their version with these and offer the download.
+  apps:
+    admin:
+      latest-version: ${ADMIN_APP_LATEST:}
+      min-version: ${ADMIN_APP_MIN:}
+      download-url: ${ADMIN_APP_URL:}
+      notes: ${ADMIN_APP_NOTES:}
+    tenant:
+      latest-version: ${TENANT_APP_LATEST:}
+      min-version: ${TENANT_APP_MIN:}
+      download-url: ${TENANT_APP_URL:}
+      notes: ${TENANT_APP_NOTES:}
+
+# Logging. Every line shows the request id, the caller and their organisation:
+#   2026-10-07 15:29:22.476 DEBUG [a1b2c3d4-e5f6 Nasrin Akter/ADMIN db787329-…] c.r.tms.auth.AuthService : …
+# ("-" where there is no request or caller, e.g. nightly jobs log the organisation only).
+# Change levels without rebuilding: LOG_LEVEL=TRACE (app), LOG_SQL=DEBUG (SQL statements),
+# LOG_WEB=DEBUG (Spring MVC / security). LOG_FILE=/var/log/tms/api.log also writes a rolling file.
+logging:
+  level:
+    root: INFO
+    com.revesoft.tms: ${LOG_LEVEL:DEBUG}
+    org.hibernate.SQL: ${LOG_SQL:INFO}
+    org.springframework.web: ${LOG_WEB:INFO}
+    org.springframework.security: ${LOG_WEB:INFO}
+  # UTF-8 so Bangla names and symbols are written correctly on Windows too.
+  charset:
+    console: UTF-8
+    file: UTF-8
+  pattern:
+    level: "%5p [%X{requestId:--} %X{user:--} %X{org:--}]"
+  file:
+    name: ${LOG_FILE:}
+  logback:
+    rollingpolicy:
+      max-file-size: 20MB
+      max-history: 14
+      total-size-cap: 1GB
+

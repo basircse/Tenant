@@ -1,0 +1,30 @@
+# Production profile (SPRING_PROFILES_ACTIVE=prod). Secrets have no defaults here,
+# so the server refuses to start until they are set.
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+server:
+  # Runs behind the Caddy reverse proxy, which terminates HTTPS.
+  forward-headers-strategy: framework
+  error:
+    include-stacktrace: never
+
+springdoc:
+  api-docs:
+    enabled: ${API_DOCS_ENABLED:false}
+  swagger-ui:
+    enabled: ${API_DOCS_ENABLED:false}
+
+tms:
+  security:
+    jwt-secret: ${JWT_SECRET}
+  storage:
+    dir: ${STORAGE_DIR:/data/files}
+
+# Production logs at INFO; set LOG_LEVEL=DEBUG temporarily to investigate a problem.
+logging:
+  level:
+    com.revesoft.tms: ${LOG_LEVEL:INFO}

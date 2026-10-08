@@ -1,0 +1,25 @@
+name: tenant_management
+description: Tenant Management - admin app for landlords, managers and the vendor console.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  provider: ^6.1.2
+  shared_preferences: ^2.3.2
+  intl: ^0.20.2
+  file_picker: ^10.3.3
+  tms_core:
+    path: packages/tms_core
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
